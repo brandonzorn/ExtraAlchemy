@@ -3,6 +3,8 @@ package zabi.minecraft.extraalchemy;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import zabi.minecraft.extraalchemy.compat.inventorio.InventorioCompatBridge;
 import zabi.minecraft.extraalchemy.compat.pehkui.PehkuiCompatBridge;
 import zabi.minecraft.extraalchemy.compat.trinkets.TrinketsCompatBridge;
@@ -18,8 +20,10 @@ import zabi.minecraft.extraalchemy.statuseffect.ModEffectRegistry;
 import zabi.minecraft.extraalchemy.utils.proxy.ServerProxy;
 
 public class ExtraAlchemy implements ModInitializer {
-	
 	private static boolean ringModsInstalled = false;
+
+	public static final String MOD_ID = "extra-alchemy";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override
 	public void onInitialize() {

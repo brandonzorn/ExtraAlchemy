@@ -10,9 +10,7 @@ import net.minecraft.item.ItemStack;
 
 @Mixin(LivingEntity.class)
 public interface InvokerLivingEntity {
-
-	@Environment(EnvType.CLIENT)
-	@Invoker("spawnItemParticles")
-	public abstract void extraalchemy_spawnParticles(ItemStack stack, int count);
-	
+    @Environment(EnvType.CLIENT)
+    @Invoker("spawnItemParticles")
+    void extraalchemy_spawnParticles(ItemStack stack, int count);
 }

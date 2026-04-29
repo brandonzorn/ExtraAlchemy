@@ -11,6 +11,7 @@ import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.recipe.RecipeSerializer;
@@ -26,11 +27,11 @@ import zabi.minecraft.extraalchemy.utils.Log;
 
 public class AlternativePotionRingRecipe extends SpecialCraftingRecipe {
 
-	private int cost;
-	private int length;
-	private int renew;
-	private int level;
-	private StatusEffect effect;
+	private final int cost;
+	private final int length;
+	private final int renew;
+	private final int level;
+	private final StatusEffect effect;
 
 	public AlternativePotionRingRecipe(Identifier id, int cost, int length, int level, int renew, StatusEffect potion) {
 		super(id, CraftingRecipeCategory.EQUIPMENT);
@@ -76,12 +77,12 @@ public class AlternativePotionRingRecipe extends SpecialCraftingRecipe {
 	public ItemStack craft(RecipeInputInventory inv, DynamicRegistryManager var2) {
 		ItemStack result = new ItemStack(ModItems.POTION_RING);
 		PotionUtil.setCustomPotionEffects(result, Collections.singleton(new StatusEffectInstance(effect)));
-		result.getOrCreateNbt();
-		result.getNbt().putInt("cost", cost);
-		result.getNbt().putInt("length", length);
-		result.getNbt().putInt("renew", renew);
-		result.getNbt().putInt("level", level);
-		result.getNbt().putBoolean("disabled", true);
+		NbtCompound nbt = result.getOrCreateNbt();
+		nbt.putInt("cost", cost);
+		nbt.putInt("length", length);
+		nbt.putInt("renew", renew);
+		nbt.putInt("level", level);
+		nbt.putBoolean("disabled", true);
 		return result;
 	}
 	
@@ -112,15 +113,28 @@ public class AlternativePotionRingRecipe extends SpecialCraftingRecipe {
 
 		@Override
 		public AlternativePotionRingRecipe read(Identifier id, JsonObject json) {
-			int cost = json.get("cost").getAsInt();
-			int length = json.get("length").getAsInt();
-			int level = json.get("level").getAsInt();
+			int cost = json.getAsJsonPrimitive("cost").getAsInt();
+			int length = json.getAsJsonPrimitive("length").getAsInt();
+			int level = json.getAsJsonPrimitive("level").getAsInt();
 			int renewTime = json.has("renew") ? json.get("renew").getAsInt() : 1;
-			String effect_name = json.get("effect").getAsString();
-			StatusEffect effect = Registries.STATUS_EFFECT.get(new Identifier(effect_name));
-			if (effect.isInstant()) {
-				Log.w("The ring recipe %s has an instant effect associated with %s, this functionality is meant for long lasting effects.", id, effect_name);
+
+			String effectName = json.getAsJsonPrimitive("potion").getAsString();
+
+			Identifier effectId;
+			try {
+				effectId = new Identifier(effectName);
+			} catch (Exception e) {
+				throw new IllegalArgumentException("Invalid effect id in recipe " + id + ": " + effectName, e);
 			}
+
+			StatusEffect effect = Registries.STATUS_EFFECT.get(effectId);
+			if (effect == null) {
+				throw new IllegalArgumentException("Unknown effect in recipe " + id + ": " + effectName);
+			}
+			if (effect.isInstant()) {
+				Log.w("The ring recipe %s has an instant effect associated with %s, this functionality is meant for long lasting effects.", id, effectName);
+			}
+
 			return new AlternativePotionRingRecipe(id, cost, length, level, renewTime, effect);
 		}
 
@@ -130,9 +144,13 @@ public class AlternativePotionRingRecipe extends SpecialCraftingRecipe {
 			int length = buf.readInt();
 			int renew = buf.readInt();
 			int level = buf.readInt();
-			String potion_name = buf.readString();
-			StatusEffect pot = Registries.STATUS_EFFECT.get(new Identifier(potion_name));
-			return new AlternativePotionRingRecipe(id, cost, length, level, renew, pot);
+
+			Identifier effectId = buf.readIdentifier();
+			StatusEffect potion = Registries.STATUS_EFFECT.get(effectId);
+			if (potion == null) {
+				throw new IllegalStateException("Unknown status effect: " + effectId);
+			}
+			return new AlternativePotionRingRecipe(id, cost, length, level, renew, potion);
 		}
 
 		@Override
@@ -141,9 +159,12 @@ public class AlternativePotionRingRecipe extends SpecialCraftingRecipe {
 			buf.writeInt(recipe.length);
 			buf.writeInt(recipe.renew);
 			buf.writeInt(recipe.level);
-			buf.writeString(Registries.STATUS_EFFECT.getId(recipe.effect).toString());
+
+			Identifier effectId = Registries.STATUS_EFFECT.getId(recipe.effect);
+			if (effectId == null) {
+				throw new IllegalStateException("Unknown status effect: " + recipe.effect);
+			}
+			buf.writeIdentifier(effectId);
 		}
-
 	}
-
 }

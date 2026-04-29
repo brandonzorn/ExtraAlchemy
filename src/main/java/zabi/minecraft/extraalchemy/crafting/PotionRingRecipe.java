@@ -7,6 +7,7 @@ import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
@@ -23,10 +24,10 @@ import zabi.minecraft.extraalchemy.utils.Log;
 
 public class PotionRingRecipe extends SpecialCraftingRecipe {
 
-	private int cost;
-	private int length;
-	private int renew;
-	private Potion potion;
+	private final int cost;
+	private final int length;
+	private final int renew;
+	private final Potion potion;
 
 	public PotionRingRecipe(Identifier id, int cost, int length, int renew, Potion potion) {
 		super(id, CraftingRecipeCategory.EQUIPMENT);
@@ -42,7 +43,7 @@ public class PotionRingRecipe extends SpecialCraftingRecipe {
 			return false;
 		}
 		
-		if (potion.getEffects().size() == 0) return false;
+		if (potion.getEffects().isEmpty()) return false;
 
 		boolean foundPotion = false;
 		boolean foundRing = false;
@@ -73,11 +74,11 @@ public class PotionRingRecipe extends SpecialCraftingRecipe {
 	public ItemStack craft(RecipeInputInventory inv, DynamicRegistryManager var2) {
 		ItemStack result = new ItemStack(ModItems.POTION_RING);
 		PotionUtil.setPotion(result, potion);
-		result.getOrCreateNbt();
-		result.getNbt().putInt("cost", cost);
-		result.getNbt().putInt("length", length);
-		result.getNbt().putInt("renew", renew);
-		result.getNbt().putBoolean("disabled", true);
+		NbtCompound nbt = result.getOrCreateNbt();
+		nbt.putInt("cost", cost);
+		nbt.putInt("length", length);
+		nbt.putInt("renew", renew);
+		nbt.putBoolean("disabled", true);
 		return result;
 	}
 	
@@ -109,18 +110,28 @@ public class PotionRingRecipe extends SpecialCraftingRecipe {
 
 		@Override
 		public PotionRingRecipe read(Identifier id, JsonObject json) {
-			int cost = json.get("cost").getAsInt();
-			int length = json.get("length").getAsInt();
+			int cost = json.getAsJsonPrimitive("cost").getAsInt();
+			int length = json.getAsJsonPrimitive("length").getAsInt();
 			int renewTime = json.has("renew") ? json.get("renew").getAsInt() : 1;
-			String potion_name = json.get("potion").getAsString();
-			Potion pot = Registries.POTION.get(new Identifier(potion_name));
-			if (pot.getEffects().size() > 1) {
-				Log.w("The ring recipe %s has more than 1 effect associated with it, this functionality is meant for 1-effect potions.");
-			} 
-			if (pot.getEffects().stream().allMatch(sei -> sei.getEffectType().isInstant())) {
-				Log.w("The ring recipe %s has no non-instant effects associated with %s, this functionality is meant for long lasting effects.", id, potion_name);
+
+			String potionName = json.getAsJsonPrimitive("potion").getAsString();
+
+			Identifier potionId;
+			try {
+				potionId = new Identifier(potionName);
+			} catch (Exception e) {
+				throw new IllegalArgumentException("Invalid potion id in recipe " + id + ": " + potionName, e);
 			}
-			return new PotionRingRecipe(id, cost, length, renewTime, pot);
+
+			Potion potion = Registries.POTION.get(potionId);
+			if (potion.getEffects().size() > 1) {
+				Log.w("The ring recipe %s has more than 1 effect associated with it, this functionality is meant for 1-effect potions.");
+			}
+			if (potion.getEffects().stream().allMatch(sei -> sei.getEffectType().isInstant())) {
+				Log.w("The ring recipe %s has no non-instant effects associated with %s, this functionality is meant for long lasting effects.", id, potionName);
+			}
+
+            return new PotionRingRecipe(id, cost, length, renewTime, potion);
 		}
 
 		@Override
@@ -129,8 +140,8 @@ public class PotionRingRecipe extends SpecialCraftingRecipe {
 			int length = buf.readInt();
 			int renew = buf.readInt();
 			String potion_name = buf.readString();
-			Potion pot = Registries.POTION.get(new Identifier(potion_name));
-			return new PotionRingRecipe(id, cost, length, renew, pot);
+			Potion potion = Registries.POTION.get(new Identifier(potion_name));
+			return new PotionRingRecipe(id, cost, length, renew, potion);
 		}
 
 		@Override

@@ -53,8 +53,7 @@ public abstract class MixinPlayerEntity extends LivingEntity implements PlayerPr
 	public int calculateXPDue(float xp) {
 		
 		int returnable = (int) (xp + ea_xp_reserve);
-		float storable = xp + ea_xp_reserve - returnable;
-		ea_xp_reserve = storable;
+        ea_xp_reserve = xp + ea_xp_reserve - returnable;
 		
 		return returnable;
 	}

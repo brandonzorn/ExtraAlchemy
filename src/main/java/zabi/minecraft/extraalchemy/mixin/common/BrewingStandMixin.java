@@ -22,7 +22,8 @@ import zabi.minecraft.extraalchemy.utils.LibMod;
 @Mixin(BrewingStandBlockEntity.class)
 public abstract class BrewingStandMixin extends LockableContainerBlockEntity implements SidedInventory {
 
-	@Shadow private int fuel;
+	@Shadow
+    int fuel;
 	
 	private static final TagKey<Block> HEAT_SOURCE_TAG = TagKey.of(Registries.BLOCK.getKey(), LibMod.id("heat_source"));
 	private static final TagKey<Block> HEAT_CONDUCTOR_TAG = TagKey.of(Registries.BLOCK.getKey(), LibMod.id("heat_conductor"));

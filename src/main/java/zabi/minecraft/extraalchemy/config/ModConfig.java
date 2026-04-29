@@ -16,9 +16,9 @@ import zabi.minecraft.extraalchemy.utils.LibMod;
 
 public class ModConfig {
 
-	private static File folder = new File("config");
+	private static final File folder = new File("config");
 	private static File configFile;
-	private static Gson config = new GsonBuilder().setPrettyPrinting().create();
+	private static final Gson config = new GsonBuilder().setPrettyPrinting().create();
 	public static ConfigInstance INSTANCE;
 
 	public static void init() {

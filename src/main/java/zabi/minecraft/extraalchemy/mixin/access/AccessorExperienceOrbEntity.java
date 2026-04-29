@@ -7,8 +7,6 @@ import net.minecraft.entity.ExperienceOrbEntity;
 
 @Mixin(ExperienceOrbEntity.class)
 public interface AccessorExperienceOrbEntity {
-
-	@Accessor("amount")
-	public void extraalchemy_setAmount(int amt);
-	
+    @Accessor("amount")
+    void extraalchemy_setAmount(int amt);
 }

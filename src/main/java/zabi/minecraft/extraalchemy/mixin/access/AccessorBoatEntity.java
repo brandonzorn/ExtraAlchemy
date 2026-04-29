@@ -7,8 +7,6 @@ import net.minecraft.entity.vehicle.BoatEntity;
 
 @Mixin(BoatEntity.class)
 public interface AccessorBoatEntity {
-
-	@Accessor("pressingForward")
-	public boolean extraalchemy_isPressingForward();
-	
+    @Accessor("pressingForward")
+    boolean extraalchemy_isPressingForward();
 }

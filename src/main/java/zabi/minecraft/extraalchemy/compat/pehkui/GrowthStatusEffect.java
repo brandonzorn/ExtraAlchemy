@@ -33,8 +33,7 @@ public class GrowthStatusEffect extends ModStatusEffect {
 	}
 	
 	@Override
-	public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier) {
-		super.onRemoved(entity, attributes, amplifier);
+	public void onEffectRemoved(LivingEntity entity) {
 		if (!entity.getEntityWorld().isClient) {
 			ScaleData data = ModSizeModifiers.GROWING.getScaleData(entity);
 			data.resetScale(true);

@@ -1,7 +1,5 @@
 package zabi.minecraft.extraalchemy.items;
 
-import java.util.Iterator;
-
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroup.DisplayContext;
@@ -60,13 +58,11 @@ public class ItemSettings {
 		
 		
 		//Adding potion vials
-		Iterator<Potion> iterator = Registries.POTION.iterator();
-		while(iterator.hasNext()) {
-			Potion potion = iterator.next();
-			if (potion != Potions.EMPTY) {
-				entries.add(PotionUtil.setPotion(new ItemStack(ModItems.POTION_VIAL), potion));
-			}
-		}
+        for (Potion potion : Registries.POTION) {
+            if (potion != Potions.EMPTY) {
+                entries.add(PotionUtil.setPotion(new ItemStack(ModItems.POTION_VIAL), potion));
+            }
+        }
 	}
 	
 }

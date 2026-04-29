@@ -7,7 +7,7 @@ import zabi.minecraft.extraalchemy.utils.Log;
 
 public class ModStatusEffect extends StatusEffect {
 	
-	private boolean instant;
+	private final boolean instant;
 	private boolean isRegistered = false;
 	
 	public ModStatusEffect(StatusEffectCategory type, int color, boolean isInstant) {
@@ -50,6 +50,10 @@ public class ModStatusEffect extends StatusEffect {
 	
 	public boolean isRegistered() {
 		return isRegistered;
+	}
+	
+	public void onEffectRemoved(LivingEntity entity) {
+		
 	}
 	
 }
