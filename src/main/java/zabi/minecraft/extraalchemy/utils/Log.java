@@ -4,11 +4,11 @@ package zabi.minecraft.extraalchemy.utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Serial;
+
 public class Log {
-	
-//	private static final Logger logger = LogManager.getLogger(LibMod.MOD_NAME, new ModMessageFactory(LibMod.MOD_NAME));
 	private static final Logger logger = LogManager.getLogger(LibMod.MOD_NAME);
-	private static boolean debug = "true".equals(System.getProperty("debug"));
+	private static final boolean debug = "true".equals(System.getProperty("debug"));
 
 	public static void i(String s) {
 		logger.info(s);
@@ -73,38 +73,13 @@ public class Log {
 	
 	public static class PropagatedException extends RuntimeException {
 
-		private static final long serialVersionUID = -6966873808580517300L;
+		@Serial
+        private static final long serialVersionUID = -6966873808580517300L;
 		
 		public PropagatedException(Throwable t) {
 			super(t);
 		}
 		
 	}
-	
-//	private static class ModMessageFactory extends AbstractMessageFactory {
-//
-//		private static final long serialVersionUID = 4790631706836869571L;
-//		
-//		private String prefix = "";
-//		
-//		public ModMessageFactory(String modid) {
-//			prefix = "[" + modid + "] ";
-//		}
-//
-//		@Override
-//		public Message newMessage(Object message) {
-//			return newMessage(prefix + message.toString());
-//		}
-//
-//		@Override
-//		public Message newMessage(String message) {
-//			return new StringFormattedMessage(prefix + message.toString());
-//		}
-//
-//		@Override
-//		public Message newMessage(String message, Object... params) {
-//			return new StringFormattedMessage(prefix + message, params);
-//		}
-//
-//	}
+
 }

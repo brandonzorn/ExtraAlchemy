@@ -27,7 +27,7 @@ public class ExtraAlchemyClient implements ClientModInitializer {
 		
 		TooltipComponentCallback.EVENT.register(data -> {
 			if (data instanceof PotionTooltipData ptd) {
-				ItemStack stack = ptd.getStack();
+				ItemStack stack = ptd.stack();
 				StatusEffectContainer sec = StatusEffectContainer.of(stack);
 				if (sec.hasEffects(stack)) return new PotionTooltipComponent(sec, stack);
 			}

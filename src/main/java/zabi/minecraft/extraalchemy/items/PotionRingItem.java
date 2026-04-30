@@ -24,117 +24,131 @@ import zabi.minecraft.extraalchemy.statuseffect.ToggleableEffect;
 
 public class PotionRingItem extends Item {
 
-	public PotionRingItem() {
-		super(new Item.Settings().maxCount(1));
-	}
+    public PotionRingItem() {
+        super(new Item.Settings().maxCount(1));
+    }
 
-	@Override
-	public boolean hasGlint(ItemStack stack) {
-		return !stack.getOrCreateNbt().getBoolean("disabled");
-	}
+    @Override
+    public boolean hasGlint(ItemStack stack) {
+        return !stack.getOrCreateNbt().getBoolean("disabled");
+    }
 
-	@Override
-	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-		super.appendTooltip(stack, world, tooltip, context);
-		try {
-			
-			if (PotionUtil.getPotionEffects(stack).size() != 1) {
-				tooltip.add(Text.literal("Error: rings must have exactly 1 effect attached!").formatted(Formatting.DARK_RED, Formatting.BOLD));
-				return;
-			}
-			
-			StatusEffectInstance sei = PotionUtil.getPotionEffects(stack).get(0);
+    @Override
+    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
+        super.appendTooltip(stack, world, tooltip, context);
+        try {
 
-			Text potionName = Text.translatable(sei.getTranslationKey()).formatted(Formatting.DARK_PURPLE);
-			Text potionLevel = Text.translatable("potion.potency."+sei.getAmplifier()).formatted(Formatting.DARK_PURPLE);
-			
-			tooltip.add(Text.translatable("item.extraalchemy.potion_ring.potion", potionName, potionLevel));
-			
-			NbtCompound tag = stack.getOrCreateNbt();
+            if (PotionUtil.getPotionEffects(stack).size() != 1) {
+                tooltip.add(Text.literal("Error: rings must have exactly 1 effect attached!").formatted(Formatting.DARK_RED, Formatting.BOLD));
+                return;
+            }
 
-			int cost = tag.getInt("cost");
-			if (cost > 0) {
-				tooltip.add(Text.translatable("item.extraalchemy.potion_ring.cost", Text.literal(""+cost).formatted(Formatting.GOLD)));
-			} else {
-				tooltip.add(Text.translatable("item.extraalchemy.potion_ring.creative").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
-			}
+            StatusEffectInstance sei = PotionUtil.getPotionEffects(stack).get(0);
 
-			tooltip.add(Text.translatable("item.extraalchemy.potion_ring.length", Text.literal(""+tag.getInt("length")).formatted(Formatting.BLUE)));
+            Text potionName = Text.translatable(sei.getTranslationKey()).formatted(Formatting.DARK_PURPLE);
+            Text potionLevel = Text.translatable("potion.potency."+sei.getAmplifier()).formatted(Formatting.DARK_PURPLE);
 
-			if (tag.getBoolean("disabled")) {
-				tooltip.add(Text.translatable("item.extraalchemy.potion_ring.disabled").formatted(Formatting.GOLD));
-			} else {
-				tooltip.add(Text.translatable("item.extraalchemy.potion_ring.enabled").formatted(Formatting.GREEN));
-			}
-		} catch (Exception e) {
-			tooltip.add(Text.literal("An error occurred when displaying the tooltip.").formatted(Formatting.RED));
-			tooltip.add(Text.literal("Destroy this item ASAP to avoid crashes.").formatted(Formatting.RED, Formatting.BOLD));
-			tooltip.add(Text.literal(e.getMessage()).formatted(Formatting.DARK_GRAY));
-		}
-	}
+            tooltip.add(Text.translatable("item.extraalchemy.potion_ring.potion", potionName, potionLevel));
 
-	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		ItemStack stack = user.getStackInHand(hand); 
-		if (user.isSneaking()) {
-			toggleRingStack(stack);
-			return new TypedActionResult<ItemStack>(ActionResult.SUCCESS, stack);
-		}
-		return new TypedActionResult<ItemStack>(ActionResult.FAIL, stack);
-	}
+            NbtCompound tag = stack.getOrCreateNbt();
 
-	public static ItemStack toggleRingStack(ItemStack stack) {
-		NbtCompound tag = stack.getOrCreateNbt();
-		tag.putBoolean("disabled", !tag.getBoolean("disabled"));
-		return stack;
-	}
+            int cost = tag.getInt("cost");
+            if (cost > 0) {
+                tooltip.add(Text.translatable("item.extraalchemy.potion_ring.cost", Text.literal(""+cost).formatted(Formatting.GOLD)));
+            } else {
+                tooltip.add(Text.translatable("item.extraalchemy.potion_ring.creative").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+            }
 
-	@Override
-	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-		if (!ExtraAlchemy.areRingModsInstalled() || ModConfig.INSTANCE.allowRingsInInventoryWithThirdPartyMods) {
-			onTick(stack, entity);
-		}
-	}
-	
-	public static void onTick(ItemStack stack, Entity entity) {
-		if (!stack.getOrCreateNbt().getBoolean("disabled") && entity instanceof LivingEntity) {
-			LivingEntity e = (LivingEntity) entity;
-			for (StatusEffectInstance sei : PotionUtil.getPotionEffects(stack)) {
-				StatusEffect statusEffect = sei.getEffectType();
-				StatusEffectInstance onEntity = e.getStatusEffect(statusEffect);
-				if (onEntity == null || onEntity.getDuration() <= stack.getNbt().getInt("renew")*20) {
-					if (drainXP(e, stack.getNbt().getInt("cost"), statusEffect)) {
-						int length = stack.getNbt().getInt("length");
-						e.addStatusEffect(new StatusEffectInstance(statusEffect, length*20, sei.getAmplifier(), false, false, true));
-					}
-				}
-			}
-		}
-	}
-	
+            tooltip.add(Text.translatable("item.extraalchemy.potion_ring.length", Text.literal(""+tag.getInt("length")).formatted(Formatting.BLUE)));
 
-	private static boolean drainXP(LivingEntity e, int cost, StatusEffect effect) {
-		if (cost <= 0) {
-			return true;
-		}
-		
-		if (effect instanceof ToggleableEffect te) {
-			if (!te.isActive(e)) {
-				return false;
-			}
-		}
+            if (tag.getBoolean("disabled")) {
+                tooltip.add(Text.translatable("item.extraalchemy.potion_ring.disabled").formatted(Formatting.GOLD));
+            } else {
+                tooltip.add(Text.translatable("item.extraalchemy.potion_ring.enabled").formatted(Formatting.GREEN));
+            }
+        } catch (Exception e) {
+            tooltip.add(Text.literal("An error occurred when displaying the tooltip.").formatted(Formatting.RED));
+            tooltip.add(Text.literal("Destroy this item ASAP to avoid crashes.").formatted(Formatting.RED, Formatting.BOLD));
+            tooltip.add(Text.literal(e.getMessage()).formatted(Formatting.DARK_GRAY));
+        }
+    }
 
-		if (e instanceof PlayerEntity p) {
-			if (p.isCreative()) {
-				return true;
-			}
-			if (p.totalExperience < cost && p.experienceLevel == 0) {
-				return false;
-			}
-			p.addExperience(-cost);
-		}
-		
-		return true;
-	}
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        ItemStack stack = user.getStackInHand(hand);
+        if (user.isSneaking()) {
+            toggleRingStack(stack);
+            return new TypedActionResult<>(ActionResult.SUCCESS, stack);
+        }
+        return new TypedActionResult<>(ActionResult.FAIL, stack);
+    }
+
+    public static ItemStack toggleRingStack(ItemStack stack) {
+        NbtCompound tag = stack.getOrCreateNbt();
+        tag.putBoolean("disabled", !tag.getBoolean("disabled"));
+        return stack;
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        if (!ExtraAlchemy.areRingModsInstalled() || ModConfig.INSTANCE.allowRingsInInventoryWithThirdPartyMods) {
+            onTick(stack, entity);
+        }
+    }
+
+    public static void onTick(ItemStack stack, Entity entity) {
+        if (!(entity instanceof LivingEntity e)) return;
+
+        NbtCompound nbt = stack.getOrCreateNbt();
+        if (nbt.getBoolean("disabled")) return;
+
+        int renew = nbt.getInt("renew") * 20;
+        int cost = nbt.getInt("cost");
+        int length = nbt.getInt("length") * 20;
+
+        for (StatusEffectInstance sei : PotionUtil.getPotionEffects(stack)) {
+            StatusEffect effect = sei.getEffectType();
+            StatusEffectInstance current = e.getStatusEffect(effect);
+
+            if (!(current == null || current.getDuration() <= renew)) continue;
+            if (!drainXP(e, cost, effect)) continue;
+
+            e.addStatusEffect(
+                    new StatusEffectInstance(
+                            effect,
+                            length,
+                            sei.getAmplifier(),
+                            false,
+                            false,
+                            true
+                    )
+            );
+        }
+    }
+
+
+    private static boolean drainXP(LivingEntity e, int cost, StatusEffect effect) {
+        if (cost <= 0) {
+            return true;
+        }
+
+        if (effect instanceof ToggleableEffect te) {
+            if (!te.isActive(e)) {
+                return false;
+            }
+        }
+
+        if (e instanceof PlayerEntity p) {
+            if (p.isCreative()) {
+                return true;
+            }
+            if (p.totalExperience < cost && p.experienceLevel == 0) {
+                return false;
+            }
+            p.addExperience(-cost);
+        }
+
+        return true;
+    }
 
 }

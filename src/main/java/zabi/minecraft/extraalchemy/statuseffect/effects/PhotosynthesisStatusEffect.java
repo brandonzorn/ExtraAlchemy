@@ -29,9 +29,7 @@ public class PhotosynthesisStatusEffect extends ModStatusEffect {
 
 			BlockPos position = entity.getBlockPos();
 
-			if (entity.getEntityWorld().isSkyVisible(position)) {
-				return true;
-			}
+            return entity.getEntityWorld().isSkyVisible(position);
 		}
 		return false;
 	}

@@ -14,7 +14,7 @@ public interface PlayerProperties {
 	
 	static PlayerProperties of(PlayerEntity player) {
 		if (Objects.nonNull(player)) {
-			return (PlayerProperties) (Object) player;
+			return (PlayerProperties) player;
 		} else {
 			throw new NullPointerException("PlayerProperties can't be read from null players");
 		}

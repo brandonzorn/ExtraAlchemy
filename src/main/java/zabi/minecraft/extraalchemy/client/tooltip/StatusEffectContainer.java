@@ -8,15 +8,15 @@ import net.minecraft.potion.PotionUtil;
 
 public interface StatusEffectContainer {
 	
-	static final StatusEffectContainer DEFAULT_CONTAINER = s -> PotionUtil.getPotionEffects(s);
+	StatusEffectContainer DEFAULT_CONTAINER = PotionUtil::getPotionEffects;
 	
-	public List<StatusEffectInstance> getContainedEffects(ItemStack stack);
+	List<StatusEffectInstance> getContainedEffects(ItemStack stack);
 	
 	default boolean hasEffects(ItemStack stack) {
-		return this.getContainedEffects(stack).size() > 0;
+		return !this.getContainedEffects(stack).isEmpty();
 	}
 	
-	public static StatusEffectContainer of(ItemStack stack) {
+	static StatusEffectContainer of(ItemStack stack) {
 		if (stack.getItem() instanceof StatusEffectContainer sec) return sec;
 		return DEFAULT_CONTAINER;
 	}

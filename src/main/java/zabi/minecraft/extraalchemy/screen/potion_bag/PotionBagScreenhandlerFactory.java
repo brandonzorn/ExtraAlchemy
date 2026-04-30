@@ -10,8 +10,8 @@ import net.minecraft.util.Hand;
 
 public class PotionBagScreenhandlerFactory implements NamedScreenHandlerFactory {
 	
-	private ItemStack bagStack;
-	private Hand hand;
+	private final ItemStack bagStack;
+	private final Hand hand;
 	
 	public PotionBagScreenhandlerFactory(ItemStack bag, Hand openingHand) {
 		hand = openingHand;

@@ -92,9 +92,7 @@ public class PotionBagItem extends Item implements DyeableItem, StatusEffectCont
 				selectPotion(stack, null);
 				break;
 			case NEXT: 
-				getFirstAvailablePotion(stack).ifPresent(potionStack -> {
-					selectPotion(stack, potionStack);
-				});
+				getFirstAvailablePotion(stack).ifPresent(potionStack -> selectPotion(stack, potionStack));
 				break;
 			case HOLD:
 			default:
@@ -189,8 +187,9 @@ public class PotionBagItem extends Item implements DyeableItem, StatusEffectCont
 	public static void toggleStatusForPlayer(PlayerEntity player, Hand hand) {
 		ItemStack stack = player.getStackInHand(hand);
 		if (stack.getItem() == ModItems.POTION_BAG) {
-			int current_mode = stack.getOrCreateNbt().getInt(TAG_MODE);
-			stack.getNbt().putInt(TAG_MODE, (current_mode + 1) % SelectionMode.values().length);
+			NbtCompound nbt = stack.getOrCreateNbt();
+			int current_mode = nbt.getInt(TAG_MODE);
+			nbt.putInt(TAG_MODE, (current_mode + 1) % SelectionMode.values().length);
 			player.getInventory().markDirty();
 		} else {
 			Log.w("Not holding a bag");
@@ -215,18 +214,15 @@ public class PotionBagItem extends Item implements DyeableItem, StatusEffectCont
 		return compoundTag != null && compoundTag.contains("color", 99) ? compoundTag.getInt("color") : 0xce7720;
 	}
 
-	public static enum SelectionMode {
+	public enum SelectionMode {
 		HOLD, NEXT, DESELECT
 	}
 
 	@Override
 	public List<StatusEffectInstance> getContainedEffects(ItemStack stack) {
 		Optional<PotionDelegate> optpot = getSelectedPotion(stack);
-		if (optpot.isEmpty()) {
-			return List.of();
-		}
-		return optpot.get().getEffects();
-	}
+        return optpot.map(PotionDelegate::getEffects).orElseGet(List::of);
+    }
 
 	@Override
 	public boolean hasEffects(ItemStack stack) {

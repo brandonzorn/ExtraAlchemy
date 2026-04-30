@@ -1,6 +1,7 @@
 package zabi.minecraft.extraalchemy.mixin.common;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -16,7 +17,8 @@ import zabi.minecraft.extraalchemy.entitydata.PlayerProperties;
 @Mixin(PlayerEntity.class)
 public abstract class MixinPlayerEntity extends LivingEntity implements PlayerProperties {
 	
-	private float ea_xp_reserve = 0;
+	@Unique
+    private float ea_xp_reserve = 0;
 
 	protected MixinPlayerEntity(EntityType<? extends LivingEntity> type, World world) {
 		super(type, world);

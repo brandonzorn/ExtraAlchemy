@@ -30,7 +30,7 @@ public class EmptyVialItem extends Item {
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		if (!ModConfig.INSTANCE.enableVials) {
-			return new TypedActionResult<ItemStack>(ActionResult.FAIL, user.getStackInHand(hand));
+			return new TypedActionResult<>(ActionResult.FAIL, user.getStackInHand(hand));
 		}
 		if (!world.isClient) {
 			for (int i = 0; i < PlayerInventory.getHotbarSize(); i++) {
@@ -48,12 +48,12 @@ public class EmptyVialItem extends Item {
 						ei.setPickupDelay(0);
 						world.spawnEntity(ei);
 					}
-					return new TypedActionResult<ItemStack>(ActionResult.SUCCESS, user.getStackInHand(hand));
+					return new TypedActionResult<>(ActionResult.SUCCESS, user.getStackInHand(hand));
 				}
 			}
 		}
 		
-		return new TypedActionResult<ItemStack>(ActionResult.SUCCESS, user.getStackInHand(hand));
+		return new TypedActionResult<>(ActionResult.SUCCESS, user.getStackInHand(hand));
 	}
 	
 	@Environment(EnvType.CLIENT)

@@ -120,10 +120,10 @@ public class PotionBagScreenHandler extends ScreenHandler {
 			if (!pd.isEmpty()) {
 				ItemStack nis = iso.copy();
 				nis.setCount(1);
-				((Slot) slots.get(slotId)).setStackNoCallbacks(nis);
+				slots.get(slotId).setStackNoCallbacks(nis);
 			}
 		} else {
-			((Slot) slots.get(slotId)).setStackNoCallbacks(ItemStack.EMPTY);
+			slots.get(slotId).setStackNoCallbacks(ItemStack.EMPTY);
 		}
 
 		this.playerInventory.markDirty();
@@ -167,7 +167,7 @@ public class PotionBagScreenHandler extends ScreenHandler {
 
 	public static class SelectorSlot extends Slot {
 
-		private ItemStack bagStack;
+		private final ItemStack bagStack;
 
 		public SelectorSlot(Inventory inventory, ItemStack stack, int x, int y) {
 			super(inventory, 0, x, y);
@@ -198,7 +198,7 @@ public class PotionBagScreenHandler extends ScreenHandler {
 		public ItemStack getStack() {
 			Optional<PotionDelegate> selectedOpt = ModItems.POTION_BAG.getSelectedPotion(bagStack);
 			if (selectedOpt.isPresent()) {
-				return selectedOpt.get().getStack();
+				return selectedOpt.get().stack();
 			} else {
 				return ItemStack.EMPTY;
 			}

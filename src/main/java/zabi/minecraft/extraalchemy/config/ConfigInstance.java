@@ -30,7 +30,7 @@ public class ConfigInstance {
 	}
 	
 	
-	public class Potions {
+	public static class Potions {
 		
 		public boolean magnetism = true;
 		public boolean photosynthesis = true;

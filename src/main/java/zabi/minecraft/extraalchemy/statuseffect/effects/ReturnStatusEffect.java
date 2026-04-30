@@ -18,13 +18,10 @@ public class ReturnStatusEffect extends ModStatusEffect {
 
 	@Override
 	public void applyInstantEffect(Entity source, Entity attacker, LivingEntity target, int amplifier, double d) {
-		if (target instanceof ServerPlayerEntity) {
-			ServerPlayerEntity player = (ServerPlayerEntity) target;
-			BlockPos respawnPos = player.getSpawnPointPosition();
+		if (target instanceof ServerPlayerEntity player) {
+            BlockPos respawnPos = player.getSpawnPointPosition();
 			if (respawnPos != null) {
-				PlayerEntity.findRespawnPosition((ServerWorld) target.getEntityWorld(), respawnPos, player.getYaw(), player.isSpawnForced(), !ModConfig.INSTANCE.useAnchorChargesWithReturnPotion).ifPresent(v3d -> {
-					player.requestTeleport(v3d.x, v3d.y, v3d.z);
-				});
+				PlayerEntity.findRespawnPosition((ServerWorld) target.getEntityWorld(), respawnPos, player.getYaw(), player.isSpawnForced(), !ModConfig.INSTANCE.useAnchorChargesWithReturnPotion).ifPresent(v3d -> player.requestTeleport(v3d.x, v3d.y, v3d.z));
 			}
 		}
 	}

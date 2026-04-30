@@ -1,7 +1,6 @@
 package zabi.minecraft.extraalchemy.statuseffect.effects;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectCategory;
@@ -20,8 +19,8 @@ public class ConcentrationStatusEffect extends ModStatusEffect {
 	@Override
 	public void applyInstantEffect(Entity source, Entity attacker, LivingEntity target, int amplifier, double d) {
 		List<StatusEffectInstance> replaceable = target.getStatusEffects().stream()
-				.filter(s -> s.shouldShowParticles())
-				.collect(Collectors.toList());
+				.filter(StatusEffectInstance::shouldShowParticles)
+				.toList();
 		
 		for (StatusEffectInstance i:replaceable) {
 			target.removeStatusEffectInternal(i.getEffectType());

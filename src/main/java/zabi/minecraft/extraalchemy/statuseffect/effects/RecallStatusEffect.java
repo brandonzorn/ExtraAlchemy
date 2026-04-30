@@ -68,12 +68,4 @@ public class RecallStatusEffect extends ModStatusEffect {
 		EntityProperties.of(entity).setRecallData(null);
     }
 
-//	public static class PlaceAt extends BlockPattern.TeleportTarget {
-//
-//		public PlaceAt(DimensionalPosition pos) {
-//			super(new Vec3d(pos.getX(), pos.getY(), pos.getZ()), Vec3d.ZERO, 0);
-//		}
-//		
-//	}
-
 }

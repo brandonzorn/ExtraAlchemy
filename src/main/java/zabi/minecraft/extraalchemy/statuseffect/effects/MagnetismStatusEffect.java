@@ -23,7 +23,6 @@ public class MagnetismStatusEffect extends ModStatusEffect implements Toggleable
 				if (PlayerProperties.of(player).isMagnetismEnabled()) {
 					entity.getEntityWorld().getEntitiesByClass(ItemEntity.class, entity.getBoundingBox().expand((level + 1) * 5), Predicates.alwaysTrue())
 					.stream()
-					.map(e -> (ItemEntity) e)
 					.filter(e -> e.isAlive() && !e.isRemoved())
 					.filter(e -> e.cannotPickup() == entity.isSneaking())
 					.forEach(e -> e.onPlayerCollision((PlayerEntity) entity));

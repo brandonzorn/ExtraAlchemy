@@ -19,7 +19,7 @@ public class CraftingRecipes {
 	public static RecipeType<AlternativePotionRingRecipe> ALT_RING_CRAFTING_TYPE;
 	
 	public static void init() {
-		FILL_VIAL_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, LibMod.id("fill_potion_vial"), new SpecialRecipeSerializer<PotionVialRecipe>(PotionVialRecipe::new));
+		FILL_VIAL_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, LibMod.id("fill_potion_vial"), new SpecialRecipeSerializer<>(PotionVialRecipe::new));
 		FILL_VIAL_RECIPE_TYPE = Registry.register(Registries.RECIPE_TYPE, LibMod.id("fill_potion_vial"), new RecipeType<PotionVialRecipe>() {});
 		
 		RING_CRAFTING_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, LibMod.id("potion_ring"), new PotionRingRecipe.Serializer());

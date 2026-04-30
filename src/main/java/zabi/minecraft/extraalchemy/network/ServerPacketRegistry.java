@@ -32,22 +32,16 @@ public class ServerPacketRegistry {
 			});
 		});
 		
-		 ServerPlayNetworking.registerGlobalReceiver(C2S_Channels.TOGGLE_RINGS_IN_EXTRA_INVENTORIES, (server, player, handler, buf, response) -> {
-			
-		 	server.execute(() -> {
-		 		if (toggleRings(player)) {
-		 			response.sendPacket(S2C_Channels.PLAY_CLICK_SOUND, PacketByteBufs.empty());
-		 		}
-		 	});
-			
-			
-		 });
+		 ServerPlayNetworking.registerGlobalReceiver(C2S_Channels.TOGGLE_RINGS_IN_EXTRA_INVENTORIES, (server, player, handler, buf, response) -> server.execute(() -> {
+             if (toggleRings(player)) {
+                 response.sendPacket(S2C_Channels.PLAY_CLICK_SOUND, PacketByteBufs.empty());
+             }
+         }));
 	}
 	
 	private static boolean toggleRings(PlayerEntity player) {
-		boolean foundAny = false;
-		foundAny |= TrinketsCompatBridge.toggleRings(player);
-		// foundAny |= OtherInventoryModCompatBridge.toggleRings(player)
+		boolean foundAny;
+		foundAny = TrinketsCompatBridge.toggleRings(player);
 		return foundAny; 
 	}
 	

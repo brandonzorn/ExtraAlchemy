@@ -11,7 +11,7 @@ public class ModScreenHandlerTypes {
 	public static ScreenHandlerType<PotionBagScreenHandler> POTION_BAG;
 	
 	public static void init() {
-		POTION_BAG = new ScreenHandlerType<PotionBagScreenHandler>(PotionBagScreenHandler::new, FeatureSet.empty());
+		POTION_BAG = new ScreenHandlerType<>(PotionBagScreenHandler::new, FeatureSet.empty());
 		Registry.register(Registries.SCREEN_HANDLER, LibMod.id("potion_bag"), POTION_BAG);
 	}
 	

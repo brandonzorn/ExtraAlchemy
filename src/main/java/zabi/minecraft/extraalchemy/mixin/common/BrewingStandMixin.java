@@ -2,6 +2,7 @@ package zabi.minecraft.extraalchemy.mixin.common;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -25,8 +26,10 @@ public abstract class BrewingStandMixin extends LockableContainerBlockEntity imp
 	@Shadow
     int fuel;
 	
-	private static final TagKey<Block> HEAT_SOURCE_TAG = TagKey.of(Registries.BLOCK.getKey(), LibMod.id("heat_source"));
-	private static final TagKey<Block> HEAT_CONDUCTOR_TAG = TagKey.of(Registries.BLOCK.getKey(), LibMod.id("heat_conductor"));
+	@Unique
+    private static final TagKey<Block> HEAT_SOURCE_TAG = TagKey.of(Registries.BLOCK.getKey(), LibMod.id("heat_source"));
+	@Unique
+    private static final TagKey<Block> HEAT_CONDUCTOR_TAG = TagKey.of(Registries.BLOCK.getKey(), LibMod.id("heat_conductor"));
 	
 	protected BrewingStandMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
 		super(blockEntityType, blockPos, blockState);
@@ -47,7 +50,8 @@ public abstract class BrewingStandMixin extends LockableContainerBlockEntity imp
 		}
 	}
 
-	private static boolean isHeated(World world, BlockPos pos) {
+	@Unique
+    private static boolean isHeated(World world, BlockPos pos) {
 		BlockState oneBelow = world.getBlockState(pos.down());
 		BlockState twoBelow = world.getBlockState(pos.down(2));
 		return oneBelow.isIn(HEAT_SOURCE_TAG) || (oneBelow.isIn(HEAT_CONDUCTOR_TAG) && twoBelow.isIn(HEAT_SOURCE_TAG));

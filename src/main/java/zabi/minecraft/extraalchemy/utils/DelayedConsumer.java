@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 
 public abstract class DelayedConsumer<T> {
 	
-	private List<Consumer<T>> tasks = Lists.newArrayList();
+	private final List<Consumer<T>> tasks = Lists.newArrayList();
 	private T key = null;
 
 	public void consumeWhenReady(Consumer<T> task) {

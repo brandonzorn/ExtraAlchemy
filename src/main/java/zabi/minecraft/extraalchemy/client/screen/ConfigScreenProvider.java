@@ -23,7 +23,7 @@ public class ConfigScreenProvider implements ModMenuApi {
 		ConfigBuilder configBuilder = ConfigBuilder.create()
 				.setTitle(Text.translatable("extraalchemy.mod_name"))
 				.setEditable(true)
-				.setSavingRunnable(() -> ModConfig.writeJson());
+				.setSavingRunnable(ModConfig::writeJson);
 		
 		ConfigCategory general = configBuilder.getOrCreateCategory(Text.translatable("extraalchemy.config.general"));
 		ConfigCategory potions = configBuilder.getOrCreateCategory(Text.translatable("extraalchemy.config.potions"));
@@ -36,22 +36,10 @@ public class ConfigScreenProvider implements ModMenuApi {
 							Text.translatable("extraalchemy.config.general.enable_learning_boost.tooltip2"), 
 							SERVER_SIDE
 					)
-					.setSaveConsumer(val -> {ModConfig.INSTANCE.learningIncreasesExpOrbValue = val;})
+					.setSaveConsumer(val -> ModConfig.INSTANCE.learningIncreasesExpOrbValue = val)
 					.build()
 		);
-		
-//		general.addEntry(configBuilder.entryBuilder()
-//				.startBooleanToggle(Text.translatable("extraalchemy.config.general.disable_inventory_shift") , ModConfig.INSTANCE.removeInventoryPotionShift)
-//					.setDefaultValue(true)
-//					.setTooltip(
-//							Text.translatable("extraalchemy.config.general.disable_inventory_shift.tooltip1"), 
-//							Text.translatable("extraalchemy.config.general.disable_inventory_shift.tooltip2"),
-//							CLIENT_SIDE
-//					)
-//					.setSaveConsumer(val -> {ModConfig.INSTANCE.removeInventoryPotionShift = val;})
-//					.build()
-//		);
-		
+
 		general.addEntry(configBuilder.entryBuilder()
 				.startBooleanToggle(Text.translatable("extraalchemy.config.general.show_icons_in_tooltips") , ModConfig.INSTANCE.showIconsInTooltips)
 					.setDefaultValue(true)
@@ -60,7 +48,7 @@ public class ConfigScreenProvider implements ModMenuApi {
 							Text.translatable("extraalchemy.config.general.show_icons_in_tooltips.tooltip2"),
 							CLIENT_SIDE
 					)
-					.setSaveConsumer(val -> {ModConfig.INSTANCE.showIconsInTooltips = val;})
+					.setSaveConsumer(val -> ModConfig.INSTANCE.showIconsInTooltips = val)
 					.build()
 		);
 		
@@ -72,7 +60,7 @@ public class ConfigScreenProvider implements ModMenuApi {
 							Text.translatable("extraalchemy.config.general.enable_vials.tooltip2"),
 							MUST_SYNC
 					)
-					.setSaveConsumer(val -> {ModConfig.INSTANCE.enableVials = val;})
+					.setSaveConsumer(val -> ModConfig.INSTANCE.enableVials = val)
 					.build()
 		);
 		
@@ -84,7 +72,7 @@ public class ConfigScreenProvider implements ModMenuApi {
 							Text.translatable("extraalchemy.config.general.enable_rings.tooltip2"),
 							MUST_SYNC
 					)
-					.setSaveConsumer(val -> {ModConfig.INSTANCE.enableRings = val;})
+					.setSaveConsumer(val -> ModConfig.INSTANCE.enableRings = val)
 					.build()
 		);
 		
@@ -96,7 +84,7 @@ public class ConfigScreenProvider implements ModMenuApi {
 							Text.translatable("extraalchemy.config.general.ignore_ring_mods.tooltip2"),
 							SERVER_SIDE
 					)
-					.setSaveConsumer(val -> {ModConfig.INSTANCE.allowRingsInInventoryWithThirdPartyMods = val;})
+					.setSaveConsumer(val -> ModConfig.INSTANCE.allowRingsInInventoryWithThirdPartyMods = val)
 					.build()
 		);
 		
@@ -108,7 +96,7 @@ public class ConfigScreenProvider implements ModMenuApi {
 							Text.translatable("extraalchemy.config.general.enable_brewing_stand_fire.tooltip2"),
 							SERVER_SIDE
 					)
-					.setSaveConsumer(val -> {ModConfig.INSTANCE.enableBrewingStandFire = val;})
+					.setSaveConsumer(val -> ModConfig.INSTANCE.enableBrewingStandFire = val)
 					.build()
 		);
 
@@ -120,7 +108,7 @@ public class ConfigScreenProvider implements ModMenuApi {
 							Text.translatable("extraalchemy.config.general.brewing_stand_heat_increment_delay.tooltip2"),
 							SERVER_SIDE
 					)
-					.setSaveConsumer(val -> {ModConfig.INSTANCE.brewingStandHeatIncrementDelay = val;})
+					.setSaveConsumer(val -> ModConfig.INSTANCE.brewingStandHeatIncrementDelay = val)
 					.build()
 		);
 
@@ -133,7 +121,7 @@ public class ConfigScreenProvider implements ModMenuApi {
 							Text.translatable("extraalchemy.config.general.brewing_stand_fire_max_capacity.tooltip2"),
 							SERVER_SIDE
 					)
-					.setSaveConsumer(val -> {ModConfig.INSTANCE.brewingStandFireMaxCapacity = val;})
+					.setSaveConsumer(val -> ModConfig.INSTANCE.brewingStandFireMaxCapacity = val)
 					.build()
 		);
 
@@ -145,7 +133,7 @@ public class ConfigScreenProvider implements ModMenuApi {
 							Text.translatable("extraalchemy.config.general.anchor_depletes.tooltip2"),
 							SERVER_SIDE
 					)
-					.setSaveConsumer(val -> {ModConfig.INSTANCE.useAnchorChargesWithReturnPotion = val;})
+					.setSaveConsumer(val -> ModConfig.INSTANCE.useAnchorChargesWithReturnPotion = val)
 					.build()
 		);
 		
@@ -180,9 +168,7 @@ public class ConfigScreenProvider implements ModMenuApi {
 	
 	@Override
 	public ConfigScreenFactory<?> getModConfigScreenFactory() {
-		return parent -> {
-			return builder().setParentScreen(parent).build();
-		};
+		return parent -> builder().setParentScreen(parent).build();
 	}
 
 }
