@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
 
-  "id": "extra-alchemy",
+  "id": "extraalchemy",
   "version": "${version}",
   "name": "Extra Alchemy",
   "description": "Adds new potions to Minecraft!",

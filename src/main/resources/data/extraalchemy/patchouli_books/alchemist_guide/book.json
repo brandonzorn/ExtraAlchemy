@@ -2,8 +2,8 @@
   "name": "extraalchemy.guide.title",
   "landing_text": "extraalchemy.guide.description",
   "subtitle": "extraalchemy.guide.subtitle",
-  "pamphlet": false,
+  "creative_tab": "extraalchemy:all",
+  "use_resource_pack": true,
   "show_progress": false,
-  "creative_tab": "extraalchemy.all",
-  "use_resource_pack": true
+  "book_texture": "patchouli:textures/gui/book_purple.png"
 }

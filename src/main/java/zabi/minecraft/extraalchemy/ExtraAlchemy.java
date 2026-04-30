@@ -22,7 +22,7 @@ import zabi.minecraft.extraalchemy.utils.proxy.ServerProxy;
 public class ExtraAlchemy implements ModInitializer {
 	private static boolean ringModsInstalled = false;
 
-	public static final String MOD_ID = "extra-alchemy";
+	public static final String MOD_ID = "extraalchemy";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override
