@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "extraalchemy:item/empty_ring"
-    }
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "extraalchemy:item/empty_ring"
+  }
 }
