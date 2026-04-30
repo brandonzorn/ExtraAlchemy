@@ -80,7 +80,7 @@ public class VialPotionItem extends PotionItem {
 	}
 
 	@Environment(EnvType.CLIENT)
-	public void appendTooltip(ItemStack stack,World world, List<Text> tooltip, TooltipContext context) {
+	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
 		PotionUtil.buildTooltip(stack, tooltip, 1.0F);
 	}
 

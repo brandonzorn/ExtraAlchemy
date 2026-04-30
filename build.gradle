@@ -8,6 +8,7 @@ group = project.maven_group
 
 repositories {
     mavenLocal()
+	maven { url = "https://cursemaven.com" }
 	maven { url = "https://maven.shedaniel.me/" }
 	maven { url = "https://maven.terraformersmc.com/releases/" }
 	maven { url = "https://api.modrinth.com/maven" }
@@ -16,7 +17,7 @@ repositories {
 		name = "Ladysnake Mods"
 		url = 'https://maven.ladysnake.org/releases'
 	}
-    maven { 
+    maven {
     	name = "Patchouli"
 		url = 'https://maven.blamejared.com'
     }
@@ -32,6 +33,7 @@ dependencies {
 
 	modImplementation "dev.emi:trinkets:${project.trinkets_version}"
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:${project.cca_version}"
+	modImplementation "vazkii.patchouli:Patchouli:${project.patchouli_version}"
 
 	modApi("com.terraformersmc:modmenu:${project.modmenu_version}")
 	modApi("com.github.Virtuoel:Pehkui:${project.pehkui_version}")
@@ -39,8 +41,8 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
+	modCompileOnly "curse.maven:inventorio-491073:${project.inventorio_version}"
 	modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}")
-	// modImplementation("vazkii.patchouli:Patchouli:${project.patchouli_version}")
 }
 
 processResources {

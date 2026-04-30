@@ -40,7 +40,7 @@ public abstract class MixinLivingEntity extends Entity implements EntityProperti
 			tag.put("recallPosition", recallPosition.toTag());
 		}
 	}
-
+	
 	@Inject(at = @At("TAIL"), method = "onStatusEffectRemoved")
 	public void ea_onStatusEffectRemoved(StatusEffectInstance effect, CallbackInfo cb) {
 		if (effect.getEffectType() instanceof ModStatusEffect mse) {
